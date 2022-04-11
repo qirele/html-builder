@@ -7,92 +7,102 @@ namespace HtmlBuilder
     public class Html
     {
 
-        public string htmlRaw;
+        public  string title;
+        public  string stylesheetFile;
+        public  int headerImportance;
+        public  string header;
+        public  string paraTxt;
+        public  string imgSrc;
+        public  string imgAltTxt;
+        public  string scriptSrc;
 
-        public static Html_Builder New()
+        public override string ToString()
         {
-            return new Html_Builder();
+            return @$"
+<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <title>{title}</title>
+    <link rel=""stylesheet"" href=""{stylesheetFile}"">
+</head>
+<body>
+    <h{headerImportance}>{header}</h{headerImportance}>
+    <p>{paraTxt}</p>
+    <img src=""{imgSrc}"" alt=""{imgAltTxt}"">
+    <script src=""{scriptSrc}""></script>
+</body>
+</html>
+";
         }
     }
 
-    public class Html_Builder
+    public interface IWithTitle { IAppendStyle WithTitle(string title); }
+    public interface IAppendStyle { IAppendHeader AppendStyle(string styleFile); }
+    public interface IAppendHeader { IAppendParagraph AppendHeader(int importance, string txt); }
+    public interface IAppendParagraph { IAppendImage AppendParagraph(string txt); }
+    public interface IAppendImage { IAppendScript AppendImage(string src, string altTxt); }
+    public interface IAppendScript { IHtmlBuilder AppendScript(string src); }
+    public interface IHtmlBuilder { Html Build(); }
+
+
+
+    public class Html_Builder :IWithTitle, IAppendStyle, IAppendHeader, IAppendParagraph, IAppendImage, IAppendScript, IHtmlBuilder
     {
-        private readonly Html html = new Html();
-        public Html_Builder WithDOCTYPE()
-        {
-            if (html.htmlRaw == null)
-            {
-                html.htmlRaw = "<!DOCTYPE html>\n";
-            }else
-            {
-                html.htmlRaw += "<!DOCTYPE html>\n";
-            }
+        private readonly Html _html = new Html();
+        
+        
 
-            return this;
+        private Html_Builder() { }
+
+        public static IWithTitle Create()
+        {
+            return new Html_Builder();
         }
 
-        public Html_Builder OpenHtml()
+        public IAppendStyle WithTitle(string title)
         {
-            html.htmlRaw += "<html>\n";
-            return this;
-        }
-        public Html_Builder CloseHtml()
-        {
-            html.htmlRaw += "</html>\n";
+            _html.title = title;
             return this;
         }
 
-
-        public Html_Builder OpenHead()
+        public IAppendHeader AppendStyle(string styleFile)
         {
-            html.htmlRaw += "<head>\n";
+            _html.stylesheetFile = styleFile;
             return this;
         }
-        public Html_Builder CloseHead()
+        public IAppendParagraph AppendHeader(int importance, string txt)
         {
-            html.htmlRaw += "</head>\n";
-            return this;
-        }
-
-        public Html_Builder WithTitle(string title)
-        {
-            html.htmlRaw += $"<title>{title}</title>\n";
+            _html.header = txt;
+            _html.headerImportance = importance;
             return this;
         }
 
-        public Html_Builder AppendLink(string src)
+        public IAppendImage AppendParagraph(string txt)
         {
-            html.htmlRaw += $@"<link rel=""stylesheet"" src=""{src}"">" + "\n";
+            _html.paraTxt = txt;
+            return this;
+        }
+        public IAppendScript AppendImage(string src, string altTxt)
+        {
+            _html.imgSrc = src;
+            _html.imgAltTxt = altTxt;
+            return this;
+        }
+        public IHtmlBuilder AppendScript(string src)
+        {
+            _html.scriptSrc = src;
             return this;
         }
 
-        public Html_Builder OpenBody()
-        {
-            html.htmlRaw += $"<body>\n";
-            return this;
-        }
-        public Html_Builder CloseBody()
-        {
-            html.htmlRaw += $"</body>\n";
-            return this;
-        }
-        public Html_Builder AppendHeading(string text, int power)
-        {
-            html.htmlRaw += $"<h{power}>{text}</h{power}>\n";
-            return this;
-        }
 
-        public Html_Builder AppendPara(string text)
-        {
-            html.htmlRaw += $"<p>{text}</p>\n";
-            return this;
-        }
+
 
         public Html Build()
         {
-            return html;
+            return _html;
         }
 
+        
     }
 
 }
