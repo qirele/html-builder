@@ -22,10 +22,10 @@ namespace HtmlBuilder
         {
             if (html.htmlRaw == null)
             {
-                html.htmlRaw = "<!DOCTYPE html>";
+                html.htmlRaw = "<!DOCTYPE html>\n";
             }else
             {
-                html.htmlRaw += "<!DOCTYPE html>";
+                html.htmlRaw += "<!DOCTYPE html>\n";
             }
 
             return this;
@@ -33,58 +33,58 @@ namespace HtmlBuilder
 
         public Html_Builder OpenHtml()
         {
-            html.htmlRaw += "<html>";
+            html.htmlRaw += "<html>\n";
             return this;
         }
         public Html_Builder CloseHtml()
         {
-            html.htmlRaw += "</html>";
+            html.htmlRaw += "</html>\n";
             return this;
         }
 
 
         public Html_Builder OpenHead()
         {
-            html.htmlRaw += "<head>";
+            html.htmlRaw += "<head>\n";
             return this;
         }
         public Html_Builder CloseHead()
         {
-            html.htmlRaw += "</head>";
+            html.htmlRaw += "</head>\n";
             return this;
         }
 
         public Html_Builder WithTitle(string title)
         {
-            html.htmlRaw += $"<title>{title}</title>";
+            html.htmlRaw += $"<title>{title}</title>\n";
             return this;
         }
 
         public Html_Builder AppendLink(string src)
         {
-            html.htmlRaw += $@"<link rel=""stylesheet"" src=""{src}""";
+            html.htmlRaw += $@"<link rel=""stylesheet"" src=""{src}"">" + "\n";
             return this;
         }
 
         public Html_Builder OpenBody()
         {
-            html.htmlRaw += $"<body>";
+            html.htmlRaw += $"<body>\n";
             return this;
         }
         public Html_Builder CloseBody()
         {
-            html.htmlRaw += $"</body>";
+            html.htmlRaw += $"</body>\n";
             return this;
         }
         public Html_Builder AppendHeading(string text, int power)
         {
-            html.htmlRaw += $"<h{power}>{text}</h{power}>";
+            html.htmlRaw += $"<h{power}>{text}</h{power}>\n";
             return this;
         }
 
         public Html_Builder AppendPara(string text)
         {
-            html.htmlRaw += $"<p>{text}</p>";
+            html.htmlRaw += $"<p>{text}</p>\n";
             return this;
         }
 
